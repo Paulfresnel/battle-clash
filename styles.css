@@ -1,3 +1,18 @@
 canvas {
     border: 2px solid #ccc;
   }
+
+#game-container{
+  display:flex;
+  justify-content: space-around;
+  position: relative;
+  bottom:130px;
+  right:40px;
+}
+
+.unit-card{
+  padding-top:55px;
+  padding-bottom: 55px;
+  padding-left:55px;
+  padding-right:55px;
+}
