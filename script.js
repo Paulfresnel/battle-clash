@@ -66,7 +66,6 @@ function renderGame(){
   ctx.clearRect(0,0,600,600);
     myGameArea.frames +=1;
     updateSoldiersLeft();
-    
     updateBullets();
     if(rightCharSoldiers.length !== 0 && leftCharSoldiers.length !== 0){
     CharacterBulletsCollision();
@@ -147,10 +146,8 @@ function updateBullets(){
 }
 
 function CharacterBulletsCollision() {
-  // check if one obstacle has had a collision with player
   if (rightCharBullets.length > 0){
   for(i=0;i<rightCharBullets.length;i++){
-      
         if (!(leftCharSoldiers[0].right() <= rightCharBullets[i].left()) && !(leftCharSoldiers[0].left() >= rightCharBullets[i].right()) && !(leftCharSoldiers[0].top() >= rightCharBullets[i].bottom()) && !(leftCharSoldiers[0].bottom() <= rightCharBullets[i].top())) { // if there’s a collision
         leftCharSoldiers[0].health -= rightCharBullets[i].damage;
         if (leftCharSoldiers[0].health<=0){
@@ -159,35 +156,29 @@ function CharacterBulletsCollision() {
           playerA.points += 1;
           playerB.lifes -= 1;
         }
-        rightCharBullets.splice(i,1);
-        //let points = rightCharBullets[i].points;
-        //  leftCharSoldiers[0].balance += points; // remove the Points from player’s Balance
-        //  rightCharBullets.splice(i,1); //remove obstacle from obstacle array
-          
+        rightCharBullets.splice(i,1);          
   }
       }
   } 
+  
     for(i=0;i<leftCharBullets.length;i++){
+      if (rightCharSoldiers.length === 0){
       if (!(rightCharSoldiers[0].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[0].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[0].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[0].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
           rightCharSoldiers[0].health -= leftCharBullets[i].damage;
           if (rightCharSoldiers[0].health<=0){
             rightCharSoldiers.splice(0,1);
-            leftCharBullets.splice(0,1);
+            leftCharBullets.splice(i,1);
             playerB.points += 1;
             playerA.lifes -= 1;
           }
-          leftCharBullets.splice(0,1);
-        
-          //let points = leftCharBullets[i].points;
-          //  unitTestLeft.balance += points; // remove the Points from player’s Balance
-          //  rightCharBullets.splice(i,1); //remove obstacle from obstacle array
-            
-    }
-        }
+          leftCharBullets.splice(i,1);            
+    
+  }
+}
+      }
     
     for (i=0; i<rightCharSoldiers.length;i++){
-      console.log(rightCharSoldiers[0].x + rightCharSoldiers[0].width);
-      if (rightCharSoldiers[i].right() >= 500 ) {
+      if (rightCharSoldiers[0].right() >= 500 ) {
         console.log('spawn point B reached');
           rightCharSoldiers.splice(0,1);
           playerB.lifes -= 5;
@@ -195,15 +186,15 @@ function CharacterBulletsCollision() {
         }
     }
     for (i=0; i<leftCharSoldiers.length;i++){
-      if (leftCharSoldiers[i].left() <= 50 ) {
+      if (leftCharSoldiers[0].left() <= 50 ) {
         console.log('spawn point A reached');
           leftCharSoldiers.splice(0,1);
           playerB.points += 5;
           playerA.lifes -= 5;
         }
     }
-    
-    }
+  }
+
 
 
 
