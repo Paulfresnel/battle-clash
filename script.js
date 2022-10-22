@@ -4,15 +4,28 @@ function targetting(e){
   if (id === 'card1'){
     spawnSoldiersRight();
   }
+  if( id === 'card3'){
+    spawnSoldiersLeft();
+  }
   console.log(id);
   
 }
 
 function timerEnergy(){
-    if (myGameArea.frames % 80 === 0 && counter <= 10){
+    if (myGameArea.frames % 80 === 0){
       counter +=1;
+      if (playerA.energy>=10){
+        playerA.energy +=0;
+      }
+      if (playerA.energy < 10){
       playerA.energy +=1;
-      playerB.energy +=1;
+      }
+      if (playerB.energy>=10){
+        playerB.energy +=0;
+      }
+      if (playerB.energy < 10){
+        playerB.energy +=1;
+        }
     }
 }
 
@@ -36,12 +49,12 @@ window.onload = function () {
     let height = 600;
     canvas.width = width;
     canvas.height = height;
-    if (rightCharSoldiers.length>0){ 
-      rightCharSoldiers[0].draw();
-    }
-    if (leftCharSoldiers.length>0){ 
-      leftCharSoldiers[0].draw();
-    }
+   // if (rightCharSoldiers.length>0){ 
+   //   rightCharSoldiers[0].draw();
+   // }
+   // if (leftCharSoldiers.length>0){ 
+   //   leftCharSoldiers[0].draw();
+   // }
     gameOnGoing();
   };
 
@@ -50,16 +63,22 @@ function gameOnGoing(){
 }
 
 function renderGame(){
+  ctx.clearRect(0,0,600,600);
     myGameArea.frames +=1;
-    ctx.clearRect(0,0,600,600);
     updateSoldiersLeft();
-    updateSoldiersRight();
+    
     updateBullets();
+    if(rightCharSoldiers.length !== 0 && leftCharSoldiers.length !== 0){
     CharacterBulletsCollision();
+  };
+  if (rightCharSoldiers.length !== 0){
+    updateSoldiersRight();
+  }
     Score();
     spawnPoints();
     timerEnergy();
     ctx.fillText(`Timer: ${counter}s`,250,120);
+    
 }
 
 
@@ -88,43 +107,42 @@ function updateSoldiersLeft(){
       //  rightCharBullets[i].draw();
       //}
   }
-  if (myGameArea.frames % 1 === 0 && leftCharSoldiers.length < 1) {
-    let randomNumber = Math.ceil(Math.random()*2);
-    if (randomNumber===1){
-      let y = 20;
-    leftCharSoldiers.push(new blackUnitLeft(y));//
-  } else if (randomNumber===2){
-    let y = 150;
-    leftCharSoldiers.push(new blackUnitLeft(y));
-  }
-}
 }
 
 
 function updateBullets(){
+  if(leftCharSoldiers.length !==0 && rightCharSoldiers.length !==0){
   let randomizer = Math.ceil(Math.random()*500);
     for (i = 0; i <  rightCharBullets.length; i++) {
       if (myGameArea.frames % 1 === 0 ){
         rightCharBullets[i].x += 5;
         rightCharBullets[i].draw();
-       // ctx.clearRect(rightCharBullets[i].x,rightCharBullets[i].y,rightCharBullets[i].width,rightCharBullets[i].height);
       }
       
-    }if (myGameArea.frames % 10 === 0 && randomizer>=300) {
+    }if (myGameArea.frames % 10 === 0 && randomizer>=300){
+        let x = rightCharSoldiers[0].x +48;
+        let y = rightCharSoldiers[0].y +22;
         console.log('working?') // every 3s
-        rightCharBullets.push(new ProjectilesRight());//
+        rightCharBullets.push(new ProjectilesRight(x,y));//
       }
+    }
 
+    if(leftCharSoldiers.length !==0 && rightCharSoldiers.length !==0){
+      let randomizer = Math.ceil(Math.random()*500);
     for (i = 0; i <  leftCharBullets.length; i++) {
+      
         if (myGameArea.frames % 1 === 0 ){
           leftCharBullets[i].x -= 5;
           leftCharBullets[i].draw();
-         // ctx.clearRect(leftCharBullets[i].x,leftCharBullets[i].y,leftCharBullets[i].width,leftCharBullets[i].height);
         }
         
-      }if (myGameArea.frames % 50 === 0 && randomizer<350) {
-          leftCharBullets.push(new ProjectilesLeft());//
+      }if (myGameArea.frames % 50 === 0 && randomizer <350) {
+        let x = leftCharSoldiers[0].x;
+        let y = leftCharSoldiers[0].y +22;
+          leftCharBullets.push(new ProjectilesLeft(x,y));//
         }
+      }
+      
     
 }
 
@@ -148,7 +166,7 @@ function CharacterBulletsCollision() {
           
   }
       }
-  } if (leftCharBullets.length > 0 && rightCharSoldiers.legnth > 0){
+  } 
     for(i=0;i<leftCharBullets.length;i++){
       if (!(rightCharSoldiers[0].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[0].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[0].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[0].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
           rightCharSoldiers[0].health -= leftCharBullets[i].damage;
@@ -166,9 +184,10 @@ function CharacterBulletsCollision() {
             
     }
         }
-    }
+    
     for (i=0; i<rightCharSoldiers.length;i++){
-      if (rightCharSoldiers[0].right() >= 560 ) {
+      console.log(rightCharSoldiers[0].x + rightCharSoldiers[0].width);
+      if (rightCharSoldiers[i].right() >= 500 ) {
         console.log('spawn point B reached');
           rightCharSoldiers.splice(0,1);
           playerB.lifes -= 5;
@@ -176,7 +195,7 @@ function CharacterBulletsCollision() {
         }
     }
     for (i=0; i<leftCharSoldiers.length;i++){
-      if (leftCharSoldiers[0].left() <= 120 ) {
+      if (leftCharSoldiers[i].left() <= 50 ) {
         console.log('spawn point A reached');
           leftCharSoldiers.splice(0,1);
           playerB.points += 5;
@@ -220,14 +239,30 @@ function spawnPoints(){
 
 function spawnSoldiersRight(){
   state1 = true;
-  if (state1 === true){
+  if (state1 === true && playerA.energy > 2){
     let randomNumber = Math.ceil(Math.random()*2);
+    playerA.energy -=3;
     if (randomNumber===1){
       let y = 20;
     rightCharSoldiers.push(new blackUnitRight(y));
     } else if (randomNumber===2){
       let y = 150;
       rightCharSoldiers.push(new blackUnitRight(y));
+    }
+  }
+}
+
+function spawnSoldiersLeft(){
+  state3 = true;
+  if (state3 === true && playerB.energy > 2){
+    let randomNumber = Math.ceil(Math.random()*2);
+    playerB.energy -=3;
+    if (randomNumber===1){
+      let y = 20;
+    leftCharSoldiers.push(new blackUnitLeft(y));
+    } else if (randomNumber===2){
+      let y = 150;
+      leftCharSoldiers.push(new blackUnitLeft(y));
     }
   }
 }

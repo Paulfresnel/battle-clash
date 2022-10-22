@@ -15,6 +15,7 @@ const playerA = {
     
   }
 let state1 = false;
+let state3 = false;
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let gameInterval, shooterRightInterval;
@@ -26,7 +27,6 @@ let counter = 0;
 const unitTestRight = rightCharSoldiers[0];
 const unitTestLeft = leftCharSoldiers[0];
 const card1 = document.getElementById('card1');
-card1.addEventListener('click', spawnSoldiersRight);
 
 
 

@@ -1,7 +1,7 @@
 class ProjectilesRight {
-    constructor(){
-      this.x = rightCharSoldiers[0].x + 48;
-      this.y = rightCharSoldiers[0].y +20;
+    constructor(x,y){
+      this.x = x;
+      this.y = y;
       this.width = 10;
       this.height = 3;
       this.damage = 1;
@@ -26,9 +26,9 @@ class ProjectilesRight {
   }
   
   class ProjectilesLeft {
-    constructor(){
-      this.x = leftCharSoldiers[0].x -48;
-      this.y = leftCharSoldiers[0].y +20;
+    constructor(x,y){
+      this.x = x;
+      this.y = y;
       this.width = 10;
       this.height = 3;
       this.damage = 3;
