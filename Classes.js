@@ -4,7 +4,7 @@ class ProjectilesRight {
       this.y = 42;
       this.width = 10;
       this.height = 3;
-      this.damage = 5;
+      this.damage = 1;
     }
     draw(){
       ctx.fillStyle = 'red';
@@ -31,7 +31,7 @@ class ProjectilesRight {
       this.y = 42;
       this.width = 10;
       this.height = 3;
-      this.damage = 5;
+      this.damage = 3;
     }
     draw(){
       ctx.fillStyle = 'black';

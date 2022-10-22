@@ -63,7 +63,7 @@ function updateSoldiersRight(){
       //  rightCharBullets[i].draw();
       //}
   }
-  if (myGameArea.frames % 1 === 0 && rightCharSoldiers.length < 1) { // every 3s
+  if (myGameArea.frames % 1 === 0 && rightCharSoldiers.length < 1){ // every 3s
     rightCharSoldiers.push(new blackUnitRight());//
   }
 }
@@ -94,7 +94,7 @@ function updateBullets(){
        // ctx.clearRect(rightCharBullets[i].x,rightCharBullets[i].y,rightCharBullets[i].width,rightCharBullets[i].height);
       }
       
-    }if (myGameArea.frames % 100 === 0 && randomizer>=250) {
+    }if (myGameArea.frames % 10 === 0 && randomizer>=250) {
         console.log('working?') // every 3s
         rightCharBullets.push(new ProjectilesRight());//
       }
@@ -106,8 +106,7 @@ function updateBullets(){
          // ctx.clearRect(leftCharBullets[i].x,leftCharBullets[i].y,leftCharBullets[i].width,leftCharBullets[i].height);
         }
         
-      }if (myGameArea.frames % 100 === 0 && randomizer<500) {
-          console.log('working?') // every 3s
+      }if (myGameArea.frames % 50 === 0 && randomizer<500) {
           leftCharBullets.push(new ProjectilesLeft());//
         }
     
@@ -118,7 +117,6 @@ function CharacterBulletsCollision() {
   if (rightCharBullets.length > 0){
   for(i=0;i<rightCharBullets.length;i++){
       if (rightCharBullets[i].right() >= leftCharSoldiers[0].left()) {
-        console.log('B is damaged');
         leftCharSoldiers[0].health -= rightCharBullets[i].damage;
         if (leftCharSoldiers[0].health<=0){
           leftCharSoldiers.splice(0,1);
@@ -127,9 +125,6 @@ function CharacterBulletsCollision() {
           playerB.lifes -= 1;
         }
         rightCharBullets.splice(i,1);
-        
-         
-        console.log('left health: ' +leftCharSoldiers[0].health)
         //let points = rightCharBullets[i].points;
         //  leftCharSoldiers[0].balance += points; // remove the Points from player’s Balance
         //  rightCharBullets.splice(i,1); //remove obstacle from obstacle array
@@ -139,7 +134,6 @@ function CharacterBulletsCollision() {
   } if (leftCharBullets.length > 0){
     for(i=0;i<leftCharBullets.length;i++){
         if (rightCharSoldiers[0].right() >= leftCharBullets[i].left() ) {
-          console.log('A is damaged');
           rightCharSoldiers[0].health -= leftCharBullets[i].damage;
           if (rightCharSoldiers[0].health<=0){
             rightCharSoldiers.splice(0,1);
@@ -156,8 +150,25 @@ function CharacterBulletsCollision() {
     }
         }
     }
+    for (i=0; i<rightCharSoldiers.length;i++){
+      if (rightCharSoldiers[0].right() >= 560 ) {
+        console.log('spawn point B reached');
+          rightCharSoldiers.splice(0,1);
+          playerB.lifes -= 5;
+          playerA.points += 5;
+        }
+    }
+    for (i=0; i<leftCharSoldiers.length;i++){
+      if (leftCharSoldiers[0].left() <= 120 ) {
+        console.log('spawn point A reached');
+          leftCharSoldiers.splice(0,1);
+          playerB.points += 5;
+          playerA.lifes -= 5;
+        }
+    }
+    
+    }
   
-  }
 
 
 
@@ -189,3 +200,4 @@ function spawnPoints(){
   ctx.lineWidth = 4;
   ctx.strokeRect(560,120,25,100);
 }
+
