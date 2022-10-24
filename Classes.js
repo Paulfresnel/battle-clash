@@ -171,7 +171,7 @@ class tankUnitRight {
         this.meleeAttack = 2;
         this.runningState = false;
         let image = new Image();
-        image.src = "./images/tank sprite/blue-tank.png";
+        image.src = "./images/tank/tank sprite/blue-tank.png";
         image.onload = () => {
             this.image = image;
             this.draw();
@@ -257,7 +257,7 @@ class tankUnitLeft {
       this.meleeAttack = 2;
       this.runningState = false;
       let image = new Image();
-      image.src = "./images/tank sprite/blue-tank.png";
+      image.src = "./images/tank/tank sprite/blue-tank.png";
       image.onload = () => {
           this.image = image;
           this.draw();

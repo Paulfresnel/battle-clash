@@ -1,10 +1,13 @@
 canvas {
     border: 2px solid #ccc;
+    display: flex;
+    margin: auto;
+    margin-bottom: 25px;
   }
 
 #game-container{
   display:flex;
-  justify-content: space-around;
+  justify-content: center;
   bottom:130px;
   right:40px;
 }
@@ -14,4 +17,52 @@ canvas {
   padding-bottom: 55px;
   padding-left:55px;
   padding-right:55px;
+  background-color: blueviolet;
+  border-radius: 38px;
+  margin-right: 15px;
+  margin-left: 15px;
+  height:250px;
+  font-weight: bold;
+  display: flex;
+  justify-content: start;
+}
+
+#player1{
+  margin-right: 25px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  display: flex;
+  
+
+
+  border:1px solid black;
+}
+
+#player2{
+  padding-top: 25px;
+  padding-bottom: 25px;
+  margin-right: 25px;
+  display: flex;
+
+
+  border:1px solid black;
+}
+
+#card2{
+  background-image: url(./images/tank/TANK.jpg);
+  background-position: center;
+}
+
+#card4{
+  background-image: url(./images/tank/TANK.jpg);
+  background-position: center;
+}
+
+#card1{
+  background-image: url(./images/Soldier/soldier\ header.jpg);
+}
+
+#card3{
+  background-image: url(./images/Soldier/soldier\ header.jpg);
+
 }
