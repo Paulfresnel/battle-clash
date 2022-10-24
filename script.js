@@ -66,9 +66,12 @@ function renderGame(){
   ctx.clearRect(0,0,600,600);
     myGameArea.frames +=1;
     updateSoldiersLeft();
-    updateBullets();
+    updateBulletsRight()
+    updateBulletsLeft();
+    spawnCollision();
     if(rightCharSoldiers.length !== 0 && leftCharSoldiers.length !== 0){
-    CharacterBulletsCollision();
+    CharacterBulletsCollisionRight();
+    CharacterBulletsCollisionLeft();
   };
   if (rightCharSoldiers.length !== 0){
     updateSoldiersRight();
@@ -109,7 +112,7 @@ function updateSoldiersLeft(){
 }
 
 
-function updateBullets(){
+function updateBulletsRight(){
   if(leftCharSoldiers.length !==0 && rightCharSoldiers.length !==0){
   let randomizer = Math.ceil(Math.random()*500);
     for (i = 0; i <  rightCharBullets.length; i++) {
@@ -118,40 +121,45 @@ function updateBullets(){
         rightCharBullets[i].draw();
       }
       
-    }if (myGameArea.frames % 10 === 0 && randomizer>=300){
-        let x = rightCharSoldiers[0].x +48;
-        let y = rightCharSoldiers[0].y +22;
+    } for (i=0;i<rightCharSoldiers.length;i++){
+    if (myGameArea.frames % 10 === 0 && randomizer>=300){
+        let x = rightCharSoldiers[i].x +48;
+        let y = rightCharSoldiers[i].y +22;
         console.log('working?') // every 3s
         rightCharBullets.push(new ProjectilesRight(x,y));//
       }
     }
-
-    if(leftCharSoldiers.length !==0 && rightCharSoldiers.length !==0){
-      let randomizer = Math.ceil(Math.random()*500);
-    for (i = 0; i <  leftCharBullets.length; i++) {
-      
-        if (myGameArea.frames % 1 === 0 ){
-          leftCharBullets[i].x -= 5;
-          leftCharBullets[i].draw();
-        }
-        
-      }if (myGameArea.frames % 50 === 0 && randomizer <350) {
-        let x = leftCharSoldiers[0].x;
-        let y = leftCharSoldiers[0].y +22;
-          leftCharBullets.push(new ProjectilesLeft(x,y));//
-        }
-      }
-      
-    
+  }    
 }
 
-function CharacterBulletsCollision() {
-  if (rightCharBullets.length > 0){
+function updateBulletsLeft(){
+  if(leftCharSoldiers.length !==0 && rightCharSoldiers.length !==0){
+    let randomizer = Math.ceil(Math.random()*500);
+  for (i = 0; i <  leftCharBullets.length; i++) {
+    
+      if (myGameArea.frames % 1 === 0 ){
+        leftCharBullets[i].x -= 5;
+        leftCharBullets[i].draw();
+      }
+      
+    } for (i=0;i<leftCharSoldiers.length;i++){
+    if (myGameArea.frames % 50 === 0 && randomizer <350) {
+      let x = leftCharSoldiers[i].x;
+      let y = leftCharSoldiers[i].y +22;
+        leftCharBullets.push(new ProjectilesLeft(x,y));//
+      }
+    }
+  }
+}
+
+function CharacterBulletsCollisionRight() {
+  if (rightCharBullets.length !== 0){
   for(i=0;i<rightCharBullets.length;i++){
-        if (!(leftCharSoldiers[0].right() <= rightCharBullets[i].left()) && !(leftCharSoldiers[0].left() >= rightCharBullets[i].right()) && !(leftCharSoldiers[0].top() >= rightCharBullets[i].bottom()) && !(leftCharSoldiers[0].bottom() <= rightCharBullets[i].top())) { // if there’s a collision
-        leftCharSoldiers[0].health -= rightCharBullets[i].damage;
-        if (leftCharSoldiers[0].health<=0){
-          leftCharSoldiers.splice(0,1);
+    for (j=0;j<leftCharSoldiers.length;j++){
+        if (!(leftCharSoldiers[j].right() <= rightCharBullets[i].left()) && !(leftCharSoldiers[j].left() >= rightCharBullets[i].right()) && !(leftCharSoldiers[j].top() >= rightCharBullets[i].bottom()) && !(leftCharSoldiers[j].bottom() <= rightCharBullets[i].top())) { // if there’s a collision
+        leftCharSoldiers[j].health -= rightCharBullets[i].damage;
+        if (leftCharSoldiers[j].health<=0){
+          leftCharSoldiers.splice(j,1);
           rightCharBullets.splice(i,1);
           playerA.points += 1;
           playerB.lifes -= 1;
@@ -159,40 +167,62 @@ function CharacterBulletsCollision() {
         rightCharBullets.splice(i,1);          
   }
       }
-  } 
-  
-    for(i=0;i<leftCharBullets.length;i++){
-      
-      if (!(rightCharSoldiers[0].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[0].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[0].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[0].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
-          rightCharSoldiers[0].health -= leftCharBullets[i].damage;
-          if (rightCharSoldiers[0].health<=0){
-            rightCharSoldiers.splice(0,1);
-            leftCharBullets.splice(i,1);
-            playerB.points += 1;
-            playerA.lifes -= 1;
-          }
-          leftCharBullets.splice(i,1);            
-    
-}
-      }
-    
-    for (i=0; i<rightCharSoldiers.length;i++){
-      if (rightCharSoldiers[0].right() >= 500 ) {
-        console.log('spawn point B reached');
-          rightCharSoldiers.splice(0,1);
-          playerB.lifes -= 5;
-          playerA.points += 5;
-        }
-    }
-    for (i=0; i<leftCharSoldiers.length;i++){
-      if (leftCharSoldiers[0].left() <= 50 ) {
-        console.log('spawn point A reached');
-          leftCharSoldiers.splice(0,1);
-          playerB.points += 5;
-          playerA.lifes -= 5;
-        }
     }
   }
+}
+
+  //for(i=0;i<rightCharBullets.length;i++){
+  //  if (!(leftCharSoldiers[0].right() <= rightCharBullets[i].left()) && !(leftCharSoldiers[0].left() >= rightCharBullets[i].right()) && !(leftCharSoldiers[0].top() >= rightCharBullets[i].bottom()) && !(leftCharSoldiers[0].bottom() <= rightCharBullets[i].top())) { // if there’s a collision
+  //  leftCharSoldiers[0].health -= rightCharBullets[i].damage;
+  //  if (leftCharSoldiers[0].health<=0){
+  //    leftCharSoldiers.splice(0,1);
+  //    rightCharBullets.splice(i,1);
+  //    playerA.points += 1;
+  //    playerB.lifes -= 1;
+  //  }
+  //  rightCharBullets.splice(i,1);          
+  //    }
+  //  //}
+
+function CharacterBulletsCollisionLeft(){
+  if (leftCharBullets.length !== 0){
+  for(i=0;i<leftCharBullets.length;i++){
+    for (j=0;j<rightCharSoldiers.length;j++){
+      
+    if (!(rightCharSoldiers[j].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[j].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[j].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[j].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
+        rightCharSoldiers[j].health -= leftCharBullets[i].damage;
+        if (rightCharSoldiers[j].health<=0){
+          rightCharSoldiers.splice(0,1);
+          leftCharBullets.splice(i,1);
+          playerB.points += 1;
+          playerA.lifes -= 1;
+        }
+        leftCharBullets.splice(i,1);            
+  
+}
+}
+    }
+  }
+}
+
+function spawnCollision(){
+  for (i=0; i<rightCharSoldiers.length;i++){
+    if (rightCharSoldiers[i].x >= 520 ) {
+      console.log('spawn point B reached');
+        rightCharSoldiers.splice(0,1);
+        playerB.lifes -= 5;
+        playerA.points += 5;
+      }
+  }
+  for (i=0; i<leftCharSoldiers.length;i++){
+    if (leftCharSoldiers[i].x <= 45 ) {
+      console.log('spawn point A reached');
+        leftCharSoldiers.splice(0,1);
+        playerB.points += 5;
+        playerA.lifes -= 5;
+      }
+  }
+}
 
 function Score(){
   ctx.fillRect(0,250,canvas.width,2);
