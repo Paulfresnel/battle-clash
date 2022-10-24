@@ -101,7 +101,7 @@ class ProjectilesRight {
       } top(){
         return this.y;
       }
-      }
+  }
   
   class blackUnitLeft {
     constructor (y){

@@ -83,9 +83,11 @@ function renderGame(){
     updateTankProjectilesRight();
   }  if (leftTankUnits.length !== 0){
     updateTankProjectilesLeft();
-  }
+  } if (leftCharBullets.length !== 0){
     updateBulletsLeft();
+  } if (rightCharBullets.length !== 0){
     updateBulletsRight();
+  }
     spawnCollision();
     CharacterBulletsCollisionRight();
     CharacterBulletsCollisionLeft();
@@ -98,8 +100,6 @@ function renderGame(){
     ctx.fillText(`Timer: ${counter}s`,250,120);
     
 }
-
-
 
 function updateSoldiersRight(){
   for (i = 0; i <  rightCharSoldiers.length; i++) {
