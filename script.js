@@ -162,7 +162,7 @@ function CharacterBulletsCollision() {
   } 
   
     for(i=0;i<leftCharBullets.length;i++){
-      if (rightCharSoldiers.length === 0){
+      
       if (!(rightCharSoldiers[0].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[0].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[0].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[0].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
           rightCharSoldiers[0].health -= leftCharBullets[i].damage;
           if (rightCharSoldiers[0].health<=0){
@@ -173,7 +173,6 @@ function CharacterBulletsCollision() {
           }
           leftCharBullets.splice(i,1);            
     
-  }
 }
       }
     
@@ -194,10 +193,6 @@ function CharacterBulletsCollision() {
         }
     }
   }
-
-
-
-
 
 function Score(){
   ctx.fillRect(0,250,canvas.width,2);
