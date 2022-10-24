@@ -16,13 +16,22 @@ const playerA = {
   }
 let state1 = false;
 let state3 = false;
+let state2 = false;
+let state4 = false;
 let canvas = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 let gameInterval, shooterRightInterval;
+
 let rightCharBullets = [];
 let rightCharSoldiers = [];
 let leftCharSoldiers = [];
 let leftCharBullets = [];
+
+let rightTankUnits = [];
+let leftTankUnits = [];
+let rightTankProjectiles = [];
+let leftTankProjectiles = [];
+
 let counter = 0;
 const unitTestRight = rightCharSoldiers[0];
 const unitTestLeft = leftCharSoldiers[0];

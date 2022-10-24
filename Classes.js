@@ -62,7 +62,7 @@ class ProjectilesRight {
           this.rangedAttack = 5;
           this.meleeAttack = 2;
           this.runningState = false;
-          const image = new Image();
+          let image = new Image();
           image.src = "./images/TeamGunner_By_SecretHideout_060519/CHARACTER_SPRITES/Red/Gunner_Red_Crouch.png";
           image.onload = () => {
               this.image = image;
@@ -72,8 +72,13 @@ class ProjectilesRight {
       draw() {
         ctx.drawImage(this.image, this.sX, this.sY, this.sW, this.sH, this.x ,this.y, this.width,this.height);
       }
-      drawCrouch(){
-        ctx.drawImage(this.image,96, 0, this.sW, this.sH, this.x ,this.y,this.width,this.height)
+      drawDead(){
+        
+          //deadImage.onload = () =>{
+          //  this.image = deadImage;
+          //  this.draw();
+          //}
+        ctx.drawImage(this.image,288, 0, this.sW, this.sH, this.x ,this.y,this.width,this.height);
       }
       moveUp(){
         this.y -= 5;
@@ -149,3 +154,148 @@ class ProjectilesRight {
       return this.y;
     }
   }
+
+class tankUnitRight {
+    constructor (y){
+        this.sX = 128;
+        this.sY = 128;
+        this.sW = 64;
+        this.sH = 64;
+        this.x = 0;
+        this.y = y;
+        this.moves = 1;
+        this.width = 64;
+        this.height = 64;
+        this.health = 20,
+        this.rangedAttack = 5;
+        this.meleeAttack = 2;
+        this.runningState = false;
+        let image = new Image();
+        image.src = "./images/tank sprite/blue-tank.png";
+        image.onload = () => {
+            this.image = image;
+            this.draw();
+            }
+    }  
+    draw() {
+      ctx.drawImage(this.image, this.sX, this.sY, this.sW, this.sH, this.x ,this.y, this.width,this.height);
+    }
+    drawDead(){
+      
+        //deadImage.onload = () =>{
+        //  this.image = deadImage;
+        //  this.draw();
+        //}
+      ctx.drawImage(this.image,288, 0, this.sW, this.sH, this.x ,this.y,this.width,this.height);
+    }
+    moveUp(){
+      this.y -= 105;
+      this.moves -= 1;
+      this.draw()
+    }
+    moveDown(){
+      this.y  += 105;
+      this.moves -= 1;
+      this.drawCrouch();
+    }
+    moveRight(){
+      this.x += 1;
+      this.draw();
+    }
+    left(){
+      return this.x;
+    } right(){
+      return this.x + this.width;
+    } bottom(){
+      return this.y + this.height;
+    } top(){
+      return this.y;
+    }
+}
+
+class tankProjectile {
+  constructor(x,y, color){
+    this.x = x;
+    this.y = y;
+    this.width = 8;
+    this.height = 5;
+    this.damage = 5;
+    this.color = color;
+  }
+  draw(){
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x ,this.y, this.width,this.height);
+  }
+  left(){
+    return this.x;
+  } right(){
+    return this.x + this.width;
+  } bottom(){
+    return this.y + this.height;
+  } top(){
+    return this.y;
+  }
+//  moveRight(){
+//    this.x += 20;
+//    this.draw();
+//}
+}
+
+class tankUnitLeft {
+  constructor (y){
+      this.sX = 0;
+      this.sY = 64;
+      this.sW = 64;
+      this.sH = 64;
+      this.x = 600-64;
+      this.y = y;
+      this.moves = 1;
+      this.width = 64;
+      this.height = 64;
+      this.health = 20,
+      this.rangedAttack = 5;
+      this.meleeAttack = 2;
+      this.runningState = false;
+      let image = new Image();
+      image.src = "./images/tank sprite/blue-tank.png";
+      image.onload = () => {
+          this.image = image;
+          this.draw();
+          }
+  }  
+  draw() {
+    ctx.drawImage(this.image, this.sX, this.sY, this.sW, this.sH, this.x ,this.y, this.width,this.height);
+  }
+  drawDead(){
+    
+      //deadImage.onload = () =>{
+      //  this.image = deadImage;
+      //  this.draw();
+      //}
+    ctx.drawImage(this.image,288, 0, this.sW, this.sH, this.x ,this.y,this.width,this.height);
+  }
+  moveUp(){
+    this.y -= 105;
+    this.moves -= 1;
+    this.draw()
+  }
+  moveDown(){
+    this.y  += 105;
+    this.moves -= 1;
+    this.drawCrouch();
+  }
+  moveRight(){
+    this.x += 1;
+    this.draw();
+  }
+  left(){
+
+    return this.x;
+  } right(){
+    return this.x + this.width;
+  } bottom(){
+    return this.y + this.height;
+  } top(){
+    return this.y;
+  }
+}

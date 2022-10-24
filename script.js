@@ -4,8 +4,14 @@ function targetting(e){
   if (id === 'card1'){
     spawnSoldiersRight();
   }
+  if (id === 'card2'){
+    spawnTankRight();
+  }
   if( id === 'card3'){
     spawnSoldiersLeft();
+  }
+  if (id === 'card4'){
+    spawnTankLeft();
   }
   console.log(id);
   
@@ -63,16 +69,18 @@ function gameOnGoing(){
 }
 
 function renderGame(){
-  ctx.clearRect(0,0,600,600);
+    ctx.clearRect(0,0,600,600);
     myGameArea.frames +=1;
+    updateTanksRight();
+    updateTanksLeft();
     updateSoldiersLeft();
-    updateBulletsRight()
+    updateTankProjectilesRight();
+    updateTankProjectilesLeft();
     updateBulletsLeft();
+    updateBulletsRight();
     spawnCollision();
-    if(rightCharSoldiers.length !== 0 && leftCharSoldiers.length !== 0){
     CharacterBulletsCollisionRight();
     CharacterBulletsCollisionLeft();
-  };
   if (rightCharSoldiers.length !== 0){
     updateSoldiersRight();
   }
@@ -133,7 +141,7 @@ function updateBulletsRight(){
 }
 
 function updateBulletsLeft(){
-  if(leftCharSoldiers.length !==0 && rightCharSoldiers.length !==0){
+  if(rightTankUnits.length !==0 || rightCharSoldiers.length !==0){
     let randomizer = Math.ceil(Math.random()*500);
   for (i = 0; i <  leftCharBullets.length; i++) {
     
@@ -169,20 +177,23 @@ function CharacterBulletsCollisionRight() {
       }
     }
   }
+  if (rightTankProjectiles.length !== 0){
+    for(i=0;i<rightTankProjectiles.length;i++){
+      for (j=0;j<leftCharSoldiers.length;j++){
+          if (!(leftCharSoldiers[j].right() <= rightTankProjectiles[i].left()) && !(leftCharSoldiers[j].left() >= rightTankProjectiles[i].right()) && !(leftCharSoldiers[j].top() >= rightTankProjectiles[i].bottom()) && !(leftCharSoldiers[j].bottom() <= rightTankProjectiles[i].top())) { // if there’s a collision
+          leftCharSoldiers[j].health -= rightTankProjectiles[i].damage;
+          if (leftCharSoldiers[j].health<=0){
+            leftCharSoldiers.splice(j,1);
+            rightTankProjectiles.splice(i,1);
+            playerA.points += 1;
+            playerB.lifes -= 1;
+          }
+          rightTankProjectiles.splice(i,1);          
+    }
+        }
+      }
+    }
 }
-
-  //for(i=0;i<rightCharBullets.length;i++){
-  //  if (!(leftCharSoldiers[0].right() <= rightCharBullets[i].left()) && !(leftCharSoldiers[0].left() >= rightCharBullets[i].right()) && !(leftCharSoldiers[0].top() >= rightCharBullets[i].bottom()) && !(leftCharSoldiers[0].bottom() <= rightCharBullets[i].top())) { // if there’s a collision
-  //  leftCharSoldiers[0].health -= rightCharBullets[i].damage;
-  //  if (leftCharSoldiers[0].health<=0){
-  //    leftCharSoldiers.splice(0,1);
-  //    rightCharBullets.splice(i,1);
-  //    playerA.points += 1;
-  //    playerB.lifes -= 1;
-  //  }
-  //  rightCharBullets.splice(i,1);          
-  //    }
-  //  //}
 
 function CharacterBulletsCollisionLeft(){
   if (leftCharBullets.length !== 0){
@@ -192,7 +203,7 @@ function CharacterBulletsCollisionLeft(){
     if (!(rightCharSoldiers[j].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[j].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[j].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[j].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
         rightCharSoldiers[j].health -= leftCharBullets[i].damage;
         if (rightCharSoldiers[j].health<=0){
-          rightCharSoldiers.splice(0,1);
+            rightCharSoldiers.splice(j,1);
           leftCharBullets.splice(i,1);
           playerB.points += 1;
           playerA.lifes -= 1;
@@ -203,13 +214,38 @@ function CharacterBulletsCollisionLeft(){
 }
     }
   }
+  if (leftTankProjectiles.length !== 0){
+    for(i=0;i<leftTankProjectiles.length;i++){
+      for (j=0;j<rightCharSoldiers.length;j++){
+          if (!(rightCharSoldiers[j].right() <= leftTankProjectiles[i].left()) && !(rightCharSoldiers[j].left() >= leftTankProjectiles[i].right()) && !(rightCharSoldiers[j].top() >= leftTankProjectiles[i].bottom()) && !(rightCharSoldiers[j].bottom() <= leftTankProjectiles[i].top())) { // if there’s a collision
+          rightCharSoldiers[j].health -= leftTankProjectiles[i].damage;
+          if (rightCharSoldiers[j].health<=0){
+            rightCharSoldiers.splice(j,1);
+            leftTankProjectiles.splice(i,1);
+            playerA.points += 1;
+            playerB.lifes -= 1;
+          }
+          leftTankProjectiles.splice(i,1);          
+    }
+        }
+      }
+    }
+
 }
 
 function spawnCollision(){
   for (i=0; i<rightCharSoldiers.length;i++){
     if (rightCharSoldiers[i].x >= 520 ) {
       console.log('spawn point B reached');
-        rightCharSoldiers.splice(0,1);
+        rightCharSoldiers.splice(i,1);
+        playerB.lifes -= 5;
+        playerA.points += 5;
+      }
+  }
+  for (i=0; i<rightTankUnits.length;i++){
+    if (rightTankUnits[i].x >= 520 ) {
+      console.log('spawn point B reached');
+        rightTankUnits.splice(i,1);
         playerB.lifes -= 5;
         playerA.points += 5;
       }
@@ -217,7 +253,7 @@ function spawnCollision(){
   for (i=0; i<leftCharSoldiers.length;i++){
     if (leftCharSoldiers[i].x <= 45 ) {
       console.log('spawn point A reached');
-        leftCharSoldiers.splice(0,1);
+        leftCharSoldiers.splice(i,1);
         playerB.points += 5;
         playerA.lifes -= 5;
       }
@@ -282,3 +318,117 @@ function spawnSoldiersLeft(){
     }
   }
 }
+
+//function drawDeadRight(){
+//  for (j=0;j<rightCharSoldiers.length;j++){
+//    if (rightCharSoldiers[j].health<=0){
+//      console.log('new console log?');
+//      let deadImage = new Image();
+//          deadImage.src = './images/TeamGunner_By_SecretHideout_060519/CHARACTER_SPRITES/Red/Gunner_Red_Death.png'
+//          rightCharSoldiers[j].image = deadImage;
+//          ctx.drawImage(rightCharSoldiers[j].image,288, 0, this.sW, this.sH, this.x ,this.y,this.width,this.height);
+//          setTimeout(() =>{
+//        rightCharSoldiers.splice(j,1)
+//      }, 1500);
+//      playerB.points += 1;
+//      playerA.lifes -= 1;
+//    }
+//  }
+//}
+
+
+function spawnTankRight(){
+  state2 = true;
+  if (state2 === true && playerA.energy > 5){
+    let randomNumber = Math.ceil(Math.random()*2);
+    playerA.energy -=5;
+    if (randomNumber===1){
+      let y = 20;
+      rightTankUnits.push(new tankUnitRight(y));
+    } else if (randomNumber===2){
+      let y = 150;
+      rightTankUnits.push(new tankUnitRight(y));
+    }
+  }
+}
+
+function updateTanksRight(){
+for (i = 0; i <  rightTankUnits.length; i++) {
+  if (myGameArea.frames % 1 === 0){
+    rightTankUnits[i].x += 0.5;
+    rightTankUnits[i].draw();
+   // ctx.clearRect(rightCharBullets[i].x,rightCharBullets[i].y,rightCharBullets[i].width,rightCharBullets[i].height);
+    }// if (myGameArea.frames % 100 === 0){
+    //  rightCharBullets[i].x += -3;
+    //  rightCharBullets[i].draw();
+    //}
+}
+}
+
+function updateTankProjectilesRight(){
+  if(rightTankUnits.length !==0){
+  let randomizer = Math.ceil(Math.random()*500);
+    for (i = 0; i <  rightTankProjectiles.length; i++) {
+      if (myGameArea.frames % 1 === 0 ){
+        rightTankProjectiles[i].x += 5;
+        rightTankProjectiles[i].draw();
+      }
+      
+    } for (i=0;i<rightTankUnits.length;i++){
+    if (myGameArea.frames % 100 === 0 && randomizer>=300){
+        let x = rightTankUnits[i].x +48;
+        let y = rightTankUnits[i].y +22;
+        console.log('working?') // every 3s
+        rightTankProjectiles.push(new tankProjectile(x,y, 'red'));//
+      }
+    }
+  }    
+}
+
+function spawnTankLeft(){
+  state4 = true;
+  if (state4 === true && playerB.energy > 5){
+    let randomNumber = Math.ceil(Math.random()*2);
+    playerB.energy -=5;
+    if (randomNumber===1){
+      let y = 20;
+      leftTankUnits.push(new tankUnitLeft(y));
+    } else if (randomNumber===2){
+      let y = 150;
+      leftTankUnits.push(new tankUnitLeft(y));
+    }
+  }
+}
+
+function updateTanksLeft(){
+  for (i = 0; i <  leftTankUnits.length; i++) {
+    if (myGameArea.frames % 1 === 0){
+      leftTankUnits[i].x -= 0.5;
+      leftTankUnits[i].draw();
+     // ctx.clearRect(rightCharBullets[i].x,rightCharBullets[i].y,rightCharBullets[i].width,rightCharBullets[i].height);
+      }// if (myGameArea.frames % 100 === 0){
+      //  rightCharBullets[i].x += -3;
+      //  rightCharBullets[i].draw();
+      //}
+  }
+  }
+
+function updateTankProjectilesLeft(){
+    if(leftTankUnits.length !==0){
+    let randomizer = Math.ceil(Math.random()*500);
+      for (i = 0; i <  leftTankProjectiles.length; i++) {
+        if (myGameArea.frames % 1 === 0 ){
+          leftTankProjectiles[i].x -= 5;
+          leftTankProjectiles[i].draw();
+        }
+        
+      } for (i=0;i<leftTankUnits.length;i++){
+      if (myGameArea.frames % 100 === 0 && randomizer>=300){
+          let x = leftTankUnits[i].x -48;
+          let y = leftTankUnits[i].y +22;
+          console.log('working?') // every 3s
+          leftTankProjectiles.push(new tankProjectile(x,y, 'black'));//
+        }
+      }
+    }    
+  }

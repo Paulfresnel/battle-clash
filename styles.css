@@ -5,7 +5,6 @@ canvas {
 #game-container{
   display:flex;
   justify-content: space-around;
-  position: relative;
   bottom:130px;
   right:40px;
 }
