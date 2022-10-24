@@ -194,8 +194,9 @@ function CharacterBulletsCollisionRight() {
         }
         rightCharBullets.splice(i,1);          
   }
-      } 
+      
     }
+  }
   }
   if (rightTankProjectiles.length !== 0){
     for(i=0;i<rightTankProjectiles.length;i++){
@@ -230,6 +231,7 @@ function CharacterBulletsCollisionRight() {
 function CharacterBulletsCollisionLeft(){
   if (leftCharBullets.length !== 0){
   for(i=0;i<leftCharBullets.length;i++){
+    if (leftCharBullets.length !== 0){
     for (j=0;j<rightCharSoldiers.length;j++){
       
     if (!(rightCharSoldiers[j].right() <= leftCharBullets[i].left()) && !(rightCharSoldiers[j].left() >= leftCharBullets[i].right()) && !(rightCharSoldiers[j].top() >= leftCharBullets[i].bottom()) && !(rightCharSoldiers[j].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
@@ -245,18 +247,19 @@ function CharacterBulletsCollisionLeft(){
 }
 }
     for (j=0;j<rightTankUnits.length;j++){
-      if (!(rightTankUnits[j].right() <= rightCharBullets[i].left()) && !(rightTankUnits[j].left() >= rightCharBullets[i].right()) && !(rightTankUnits[j].top() >= rightCharBullets[i].bottom()) && !(rightTankUnits[j].bottom() <= rightCharBullets[i].top())) { // if there’s a collision
-      rightTankUnits[j].health -= rightCharBullets[i].damage;
+      if (!(rightTankUnits[j].right() <= leftCharBullets[i].left()) && !(rightTankUnits[j].left() >= leftCharBullets[i].right()) && !(rightTankUnits[j].top() >= leftCharBullets[i].bottom()) && !(rightTankUnits[j].bottom() <= leftCharBullets[i].top())) { // if there’s a collision
+      rightTankUnits[j].health -= leftCharBullets[i].damage;
       if (rightTankUnits[j].health<=0){
         rightTankUnits.splice(j,1);
         rightCharBullets.splice(i,1);
         playerA.points += 1;
         playerB.lifes -= 1;
       }
-      rightCharBullets.splice(i,1);          
+      leftCharBullets.splice(i,1);          
     }
 } 
     }
+  }
   }
   if (leftTankProjectiles.length !== 0){
     for(i=0;i<leftTankProjectiles.length;i++){
@@ -272,6 +275,18 @@ function CharacterBulletsCollisionLeft(){
           leftTankProjectiles.splice(i,1);          
     }
         }
+        for (j=0;j<rightTankUnits.length;j++){
+          if (!(rightTankUnits[j].right() <= leftTankProjectiles[i].left()) && !(rightTankUnits[j].left() >= leftTankProjectiles[i].right()) && !(rightTankUnits[j].top() >= leftTankProjectiles[i].bottom()) && !(rightTankUnits[j].bottom() <= leftTankProjectiles[i].top())) { // if there’s a collision
+          rightTankUnits[j].health -= leftTankProjectiles[i].damage;
+          if (rightTankUnits[j].health<=0){
+            rightTankUnits.splice(j,1);
+            rightCharBullets.splice(i,1);
+            playerA.points += 1;
+            playerB.lifes -= 1;
+          }
+          leftTankProjectiles.splice(i,1);          
+        }
+    } 
       }
     }
 
@@ -281,47 +296,47 @@ function spawnCollision(){
   for (i=0; i<rightCharSoldiers.length;i++){
     if (rightCharSoldiers[i].x >= 520 ) {
       console.log('spawn point B reached');
-        rightCharSoldiers.splice(i,1);
         playerB.lifes -= rightCharSoldiers[i].health;
         playerA.points += rightCharSoldiers[i].health;
+        rightCharSoldiers.splice(i,1);
       }
   }
   for (i=0; i<rightTankUnits.length;i++){
     if (rightTankUnits[i].x >= 520 ) {
-      console.log('spawn point B reached');
-        rightTankUnits.splice(i,1);
+      console.log('spawn point B reached'); 
         playerB.lifes -= rightTankUnits[i].health;
         playerA.points += rightTankUnits[i].health;
+        rightTankUnits.splice(i,1);
       }
   }
   for (i=0; i<leftCharSoldiers.length;i++){
     if (leftCharSoldiers[i].x <= 45 ) {
       console.log('spawn point A reached');
-        leftCharSoldiers.splice(i,1);
         playerB.points += leftCharSoldiers[i].health;
         playerA.lifes -= leftCharSoldiers[i].health;
+        leftCharSoldiers.splice(i,1);
       }
   }
   for (i=0; i<leftTankUnits.length;i++){
     if (leftTankUnits[i].x <= 45 ) {
       console.log('spawn point A reached');
-        leftTankUnits.splice(i,1);
         playerB.points += leftTankUnits[i].health;
         playerA.lifes -= leftTankUnits[i].health;
+        leftTankUnits.splice(i,1);
       }
   }
 }
 
 function Score(){
-  ctx.fillRect(0,250,canvas.width,2);
+  ctx.fillRect(0,230,canvas.width,2);
   ctx.fillStyle = 'black';
   ctx.font = "15px Georgia";
-  ctx.fillText(`Player A lifes: ${playerA.lifes}`,20,280);
-  ctx.fillText(`Player A Energy: ${playerA.energy}`,20,450);
-  ctx.fillText(`Player B Energy: ${playerB.energy}`,450,450);
-  ctx.fillText(`Player A points: ${playerA.points}`,235,350);
-  ctx.fillText(`Player B points: ${playerB.points}`,235,400);
-  ctx.fillText(`Player B lifes: ${playerB.lifes}`,470,280);
+  ctx.fillText(`Player A lifes: ${playerA.lifes}`,20,270);
+  ctx.fillText(`Player A Energy: ${playerA.energy}`,20,440);
+  ctx.fillText(`Player B Energy: ${playerB.energy}`,450,440);
+  ctx.fillText(`Player A points: ${playerA.points}`,235,340);
+  ctx.fillText(`Player B points: ${playerB.points}`,235,390);
+  ctx.fillText(`Player B lifes: ${playerB.lifes}`,470,270);
 }
 
 function spawnPoints(){
@@ -332,13 +347,20 @@ function spawnPoints(){
   ctx.fillRect(5,120,25,100);
 
   ctx.strokeStyle = 'green';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 2.5;
   ctx.strokeRect(560,5,25,100);
  
 
   ctx.strokeStyle = 'green';
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 2.5;
   ctx.strokeRect(560,120,25,100);
+
+  ctx.fillStyle = 'black';
+  ctx.fillRect(5, 113, 220, 2);
+
+  ctx.fillStyle = 'black';
+  ctx.fillRect(340, 113, 245, 2);
+
 }
 
 function spawnSoldiersRight(){
