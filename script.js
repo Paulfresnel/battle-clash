@@ -78,22 +78,22 @@ function renderGame(){
   }
   if (leftCharSoldiers.length !== 0){
     updateSoldiersLeft();
+  } if (rightCharSoldiers.length !== 0){
+    updateSoldiersRight();
   }
   if (rightTankUnits.length !== 0){
     updateTankProjectilesRight();
   }  if (leftTankUnits.length !== 0){
     updateTankProjectilesLeft();
-  } if (leftCharBullets.length !== 0){
+  } if (leftCharSoldiers.length !== 0){
     updateBulletsLeft();
-  } if (rightCharBullets.length !== 0){
+  } if (rightCharSoldiers.length !== 0){
     updateBulletsRight();
   }
     spawnCollision();
     CharacterBulletsCollisionRight();
     CharacterBulletsCollisionLeft();
-  if (rightCharSoldiers.length !== 0){
-    updateSoldiersRight();
-  }
+  
     Score();
     spawnPoints();
     timerEnergy();
